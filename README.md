@@ -1,4 +1,4 @@
-# Data Cleaning Project With SQL
+# Nashville Housing Data Cleaning Project
 
 ## Overview
 
@@ -64,9 +64,9 @@ JOIN NashvilleHousing T2
 	ON T1.ParcelID = T2.ParcelID
 	AND T1.[UniqueID ] <> T2.[UniqueID ]
 WHERE T1.PropertyAddress IS NULL;
-
 ```
 ### Query 3: Dividing Address into Individual Columns
+#### Fixing Property Address (Used SUBSTRING and CHARINDEX):
 ```sql
 ALTER TABLE NashvilleHousing
 ADD PropertyStreetAddress NVARCHAR(255),
@@ -75,7 +75,21 @@ ADD PropertyStreetAddress NVARCHAR(255),
 UPDATE NashvilleHousing
 SET PropertyStreetAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1 ),
 	PropertyCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1 , LEN(PropertyAddress));
+```
+#### Fixing Owner Address (Used PARSENAME and REPLACE):
+```sql
+ALTER TABLE NashvilleHousing
+ADD OwnerStreetAddress NVARCHAR(255),
+	OwnerCity NVARCHAR(255),
+	OwnerState NVARCHAR(255)
 
+Update NashvilleHousing	
+SET OwnerStreetAddress = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 3),
+	OwnerCity = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 2),
+	OwnerState = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 1);
+
+ALTER TABLE NashvilleHousing
+DROP COLUMN PropertyAddress, OwnerAddress;
 ```
 
 ### Query 4: Changing Y and N to Yes and No
@@ -85,7 +99,6 @@ SET SoldAsVacant = CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
 	   WHEN SoldAsVacant = 'N' THEN 'No'
 	   ELSE SoldAsVacant
 	   END;
-
 ```
 
 ### Query 5: Removing Duplicate Rows
@@ -105,7 +118,6 @@ From NashvilleHousing
 DELETE
 From CTE
 Where row_num > 1;
-
 ```
 ## Results
 
