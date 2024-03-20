@@ -4,6 +4,10 @@
 
 This project focuses on cleaning and preprocessing a housing dataset sourced from Nashville. The dataset contained various issues such as inconsistent date formats, missing values, and non-standardized address fields. Using Microsoft SQL Server, advanced SQL queries were employed to clean the dataset and prepare it for further analysis.
 
+
+<img src="https://github.com/AbdullahTabassam/Data-Cleaning-With-SQL/raw/main/sql_data_cleaning.jpg" alt="Image" height="250" width="400">
+
+
 ## Table of Contents
 
 - [Dataset](#dataset)
